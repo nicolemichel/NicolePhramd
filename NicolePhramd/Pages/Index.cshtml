@@ -1,0 +1,75 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+
+<div id="grid">
+    <header></header>
+    <div id="pics"></div>
+    <div id="weather" style="display: @Model.display">
+        <p>Weather</p>
+        <form method="post" asp-page-handler="Weather">
+            <select required class="drop" name="Country" @Model.selCountry>
+                <option value="">Select A Country</option>
+                <option value="CA">Canada</option>
+            </select>
+
+            <select required class="drop" name="City" @Model.selCity>
+                <option value="">Select A City</option>
+                <option value="toronto">Toronto</option>
+                <option value="ottawa">Ottawa</option>
+                <option value="montreal">Montreal</option>
+                <option value="gatineau">Gatineau</option>
+                <option value="quebec">Quebec City</option>
+                <option value="london">London</option>
+                <option value="sarnia">Sarnia</option>
+                <option value="windsor">Windsor</option>
+                <option value="kitchener">Kitchener</option>
+                <option value="kingston">Kingston</option>
+                <option value="oshawa">Oshawa</option>
+                <option value="hamilton">Hamilton</option>
+                <option value="guelph">Guelph</option>
+            </select>
+
+            <select required class="drop" name="Unit" @Model.selUnit>
+                <option value="">Select A Unit of Measurement</option>
+                <option value="metric">Metric</option>
+                <option value="imperial">Imperial</option>
+                <option value="kelvin">Kelvin</option>
+            </select>
+
+            <input type="submit" value="Get the Weather" />
+        </form>
+        <p>City: @Model.selCity</p>
+        <p>Country: @Model.selCountry</p>
+        <p>Main weather description: @Model.desc</p>
+        <p>Weather Id: @Model.wetId</p>
+        <p>Weather Main: @Model.wetMain</p>
+        <p>Weather Description: @Model.wetDesc</p>
+        <p>Main Weather: @Model.main</p>
+        <p>Todays Temp: @Model.temp</p>
+        <p>Daily High: @Model.tempHigh</p>
+        <p>Daily Low: @Model.tempLow</p>
+        <p>Humidity: @Model.humidity%</p>
+        <p>Pressure: @Model.pressure</p>
+        <p>Visibility: @Model.visibility</p>
+        <p>Wind Speed: @Model.windSpeed</p>
+        <p>Wind Direction: @Model.windDir (degrees)</p>
+        <p>Wind Gust: @Model.windGust</p>
+        <p>Icon: @Model.dayIcon</p>
+        <p>Sunrise: @Model.sunrise</p>
+        <p>Sunset: @Model.sunset</p>
+        <p>Rain in 3h: @Model.rain3h</p>
+        <p>Snow in 3h: @Model.snow3h</p>
+    </div>
+    <div id="calendar">
+        Calendar
+    </div>
+    <div id="news">
+        News
+    </div>
+    <div id="todo">
+        To-Do
+    </div>
+</div>

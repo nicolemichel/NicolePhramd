@@ -1,0 +1,147 @@
+
+body {
+    width: 100%;
+    margin: 0 auto;
+    background: #fff; /*will be google pictures or dark/light theme*/
+}
+
+#grid {
+    display: grid;
+    background: #bb8;
+    width: 100%;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    grid-template-areas:
+        "hdr hdr hdr hdr hdr hdr"
+        "nav nav nav nav nav nav"
+        "dat dat dat tim tim tim"
+        "wet wet wet wet wet wet"
+        "cal cal cal cal cal cal"
+        "new new new tdo tdo tdo"
+        "ftr ftr ftr ftr ftr ftr";
+}
+header {
+    display:grid;
+    grid-area:hdr;
+    width: 100%;
+    background: #ccc;
+}
+#nav {
+    display: grid;
+    grid-area: nav;
+    width: 100%;
+    background: #f00;
+}
+#date {
+    display: grid;
+    grid-area: dat;
+    width: 100%;
+    background: #0f0;
+}
+#time {
+    display: grid;
+    grid-area: tim;
+    width: 100%;
+    background: #00f;
+}
+#weather {
+    display: grid;
+    grid-area: wet;
+    min-height: 100px;
+    width: 100%;
+    background: #ff6a00;
+}
+    .drop {
+        width: 250px;
+    }
+#calendar {
+    display: grid;
+    grid-area: cal;
+    width: 100%;
+    background: #ffd800;
+}
+#news {
+    display: grid;
+    grid-area: new;
+    width: 100%;
+    background: #b200ff;
+}
+#todo {
+    display: grid;
+    grid-area: tdo;
+    width: 100%;
+    background: #ff006e;
+}
+footer {
+    display: grid;
+    grid-area: ftr;
+    width: 100%;
+    background: #ccc;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification 
+for details on configuring this project to bundle and minify static web assets. */
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
