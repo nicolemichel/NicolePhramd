@@ -148,6 +148,7 @@ namespace NicolePhramd.Pages
             windSpeed = jNinja.GetInfo("\"speed\"");
             windDir = jNinja.GetInfo("\"deg\"");
             //windGust = jNinja.GetInfo("\"gust\""); need? same as speed
+            // test
 
             // length of day
             sunrise = jNinja.GetInfo("\"sunrise\"");
