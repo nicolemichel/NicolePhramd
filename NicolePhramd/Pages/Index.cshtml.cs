@@ -234,7 +234,7 @@ namespace NicolePhramd.Pages
                 windSpeed = windSpeed + " meters/second";
             }
 
-            // test
+            // testing
             // Convert to Double then assign a String.
             double wTemp = Convert.ToDouble(windDir);
             switch (windDir)
