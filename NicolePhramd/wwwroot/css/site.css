@@ -54,6 +54,153 @@ header {
     .drop {
         width: 250px;
     }
+    #weatherGrid {
+        display: grid;
+        background: #ccc;
+        grid-template-columns: repeat(4, 1fr);
+        grid-auto-rows: minmax(100px, auto);
+        grid-template-areas: 
+            "img  .  des cld" 
+            "loc day ris set" 
+            "tmp hmd wnd prc" 
+            "hot prs spd ran" 
+            "low vis dir snw";
+    }
+        #img {
+            display: grid;
+            grid-area: img;
+            height: auto;
+            width: auto;
+        }
+        #des {
+            display: grid;
+            grid-area: des;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #cld {
+            display: grid;
+            grid-area: cld;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #loc {
+            display: grid;
+            grid-area: loc;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #day {
+            display: grid;
+            grid-area: day;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #ris {
+            display: grid;
+            grid-area: ris;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #set {
+            display: grid;
+            grid-area: set;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #tmp {
+            display: grid;
+            grid-area: tmp;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #hot {
+            display: grid;
+            grid-area: hot;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #low {
+            display: grid;
+            grid-area: low;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #hmd {
+            display: grid;
+            grid-area: hmd;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #prs {
+            display: grid;
+            grid-area: prs;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #vis {
+            display: grid;
+            grid-area: vis;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #wnd {
+            display: grid;
+            grid-area: wnd;
+            height: auto;
+            width: auto;
+            text-align: center;
+            background: #fff;
+        }
+        #spd {
+            display: grid;
+            grid-area: spd;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #dir {
+            display: grid;
+            grid-area: dir;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #prc {
+            display: grid;
+            grid-area: prc;
+            height: auto;
+            width: auto;
+            text-align: center;
+            background: #fff;
+        }
+        #ran {
+            display: grid;
+            grid-area: ran;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+        #snw {
+            display: grid;
+            grid-area: snw;
+            height: auto;
+            width: auto;
+            background: #fff;
+        }
+    
 #calendar {
     display: grid;
     grid-area: cal;

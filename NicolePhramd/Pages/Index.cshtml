@@ -41,27 +41,27 @@
 
             <input type="submit" value="Get the Weather" />
         </form>
-        <p>City: @Model.selCity</p>
-        <p>Country: @Model.selCountry</p>
-        <p>Main weather description: @Model.desc</p>
-        <p>Weather Id: @Model.wetId</p>
-        <p>Weather Main: @Model.wetMain</p>
-        <p>Weather Description: @Model.wetDesc</p>
-        <p>Main Weather: @Model.main</p>
-        <p>Todays Temp: @Model.temp</p>
-        <p>Daily High: @Model.tempHigh</p>
-        <p>Daily Low: @Model.tempLow</p>
-        <p>Humidity: @Model.humidity%</p>
-        <p>Pressure: @Model.pressure</p>
-        <p>Visibility: @Model.visibility</p>
-        <p>Wind Speed: @Model.windSpeed</p>
-        <p>Wind Direction: @Model.windDir (degrees)</p>
-        <p>Wind Gust: @Model.windGust</p>
-        <p>Icon: @Model.dayIcon</p>
-        <p>Sunrise: @Model.sunrise</p>
-        <p>Sunset: @Model.sunset</p>
-        <p>Rain in 3h: @Model.rain3h</p>
-        <p>Snow in 3h: @Model.snow3h</p>
+        <div id="weatherGrid">
+            <img src="@Url.Content(Model.iconShow)" alt="Weather Icon" />
+            <p id="day">@Model.today</p>
+            <p id="cld">Clouds: @Model.all%</p>
+            <p id="loc">City: @Model.selCity, @Model.selCountry</p>
+            <p id="des">Weather Description: @Model.desc</p>
+            <p id="ris">Sunrise: @Model.riseTime</p>
+            <p id="set">Sunset: @Model.setTime</p>
+            <p id="tmp">Currently: @Model.temp</p>
+            <p id="hot">High: @Model.tempHigh</p>
+            <p id="low">Low: @Model.tempLow</p>
+            <p id="hmd">Humidity: @Model.humidity%</p>
+            <p id="prs">Pressure: @Model.pressure hPa</p>
+            <p id="vis">Visibility: @Model.visibility</p>
+            <p id="wnd">Wind</p>
+            <p id="spd">Speed: @Model.windSpeed</p>
+            <p id="dir">Direction: @Model.windDir°</p>
+            <p id="prc">Precipitation</p>
+            <p id="ran">Rain: @Model.rain3h mm</p>
+            <p id="snw">Snow: @Model.snow3h mm</p>
+        </div>
     </div>
     <div id="calendar">
         Calendar

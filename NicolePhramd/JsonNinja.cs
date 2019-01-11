@@ -40,7 +40,6 @@ namespace NicolePhramd
             
             int k = 0;
             while (k < data.Length)
-
             {
                 char test = data[k];
                 if (data[k] == '"' && startFound == true)
@@ -48,10 +47,9 @@ namespace NicolePhramd
                     startFound = false;
                     startPos = k;
                 }
-
                 if (data[k] == ':' && endFound == true)
                 {
-                    if (data[k + 1] == '[')
+                    if (data[k + 2] == '[')
                     {
                         collection = true;
                     }
@@ -62,7 +60,6 @@ namespace NicolePhramd
 
                     names.Add(nameCut);
                 }
-                
                 if (collection == true)
                 {
                     if (data[k] == '[')
@@ -80,7 +77,6 @@ namespace NicolePhramd
                             collectionCounter = 0;
                             collection = false;
                         }
-
                         else
                         {
                             collectionCounter--;
@@ -114,8 +110,7 @@ namespace NicolePhramd
             //value = value.Substring(1, value.Length -2);
             return value;
         }
-       
-
+        
         public List<string> GetDetails(string key)
         {
             List<string> value = new List<string>();
@@ -125,7 +120,7 @@ namespace NicolePhramd
                 {
                     if (vals[i] != "null")
                     {
-                        value.Add(vals[i].Substring(1, vals[i].Length - 2));
+                        value.Add(vals[i]);
                     }
                     else
                     {

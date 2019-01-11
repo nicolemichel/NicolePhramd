@@ -10,5 +10,8 @@ namespace NicolePhramd.Utility
         public string selCity { get; set; }
         public string selCountry { get; set; }
         public string selUnit { get; set; }
+        public string metric = "metric";
+        public string imperial = "imperial";
+        public string kelvin = "kelvin";
     }
 }
