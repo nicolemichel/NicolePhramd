@@ -25,6 +25,7 @@ namespace NicolePhramd.Utility
         public List<string> wind = new List<string>();
         public string windSpeed { get; set; }
         public string windDir { get; set; } // in degrees - set up if statement to get N/E/S/W
+        public string windText { get; set; }
         // LENGTH OF DAY
         public string sunrise { get; set; }
         public string riseTime { get; set; }

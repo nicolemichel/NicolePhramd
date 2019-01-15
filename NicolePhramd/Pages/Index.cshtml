@@ -55,19 +55,25 @@
             <p id="hmd">Humidity: @Model.humidity%</p>
             <p id="prs">Pressure: @Model.pressure hPa</p>
             <p id="vis">Visibility: @Model.visibility</p>
-            <p id="wnd">Wind</p>
+            <p id="wnd">Wind:</p>
             <p id="spd">Speed: @Model.windSpeed</p>
-            <p id="dir">Direction: @Model.windDir°</p>
-            <p id="prc">Precipitation</p>
+            <p id="dir">Direction: @Model.windText</p>
+            <!--<p id="prc">Precipitation</p>
             <p id="ran">Rain: @Model.rain3h mm</p>
-            <p id="snw">Snow: @Model.snow3h mm</p>
+            <p id="snw">Snow: @Model.snow3h mm</p>-->
         </div>
     </div>
     <div id="calendar">
         Calendar
     </div>
     <div id="news">
-        News
+        <div id="newsGrid">
+            News
+            <p id="headline">@Model.headline</p>
+            <p id="channel">@Model.channel</p>
+            <p id="credit">@Model.credit</p>
+            <p id="published">@Model.published</p>
+        </div>
     </div>
     <div id="todo">
         To-Do

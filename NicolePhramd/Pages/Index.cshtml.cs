@@ -13,8 +13,8 @@ namespace NicolePhramd.Pages
         public string display = "grid";
         public List<string> filter = new List<string>();
         public string today;
-
-        // Coming from google photos
+       
+        // Coming from chosen email (ie. google, icloud, dropbox etc.)
         public List<string> pictures = new List<string>(); // background photos
 
         // WEATHER \\
@@ -48,7 +48,7 @@ namespace NicolePhramd.Pages
         public List<string> wind = new List<string>();
         public string windSpeed;
         public string windDir; // in degrees - set up if statement to get N/E/S/W
-        public string windGust;
+        public string windText;
         // length of day
         public string sunrise;
         public string riseTime;
@@ -66,11 +66,18 @@ namespace NicolePhramd.Pages
         
         // 5 day - convert to lists (new Ninja?)
 
+        // CALENDAR
         public string calendar = "";
         //events
         //people/colours
 
-        public string news = "";
+        // NEWS
+        public string headline;
+        public string channel;
+        public string credit;
+        public string published;
+        public DateTime day;
+        // thumbnail ??
         //headlines (timer?)
 
         //todo list
@@ -87,7 +94,7 @@ namespace NicolePhramd.Pages
         public async Task OnPostWeather(string City, string Country, string Unit)
         {
             display = "grid";
-            // make a default of London, CA & metric.
+            // HAVE TO MAKE A DEFAULT - London, ON & Metric.
                                    
             Program.Weather.selCity = City;
             Program.Weather.selCountry = Country;
@@ -102,12 +109,8 @@ namespace NicolePhramd.Pages
                        
             Program.Weather.selCity = jNinja.GetInfo("\"name\"");
             Program.Weather.selCountry = jNinja.GetInfo("\"country\"");
-            // not in the api, choice has to be inserted into the api call????
-            //Program.Weather.selUnit = jNinja/GetInfo("\"\"");
-            // Also have to make sense of the data - lots of random numbers (add degrees etc.)
-            // Need a switch for the display (if C/F/Kelvin) to show the change/unit
 
-            //Retrieve information from Weather Class
+            // Retrieve information from Weather Class
             selCity = Program.Weather.selCity;
             selCountry = Program.Weather.selCountry;
             selUnit = Program.Weather.selUnit;
@@ -117,7 +120,7 @@ namespace NicolePhramd.Pages
 
             today = DateTime.Now.ToString("dddd, MMMM dd yyyy HH:mm tt");
 
-            //Retrieve information from WeatherData Class
+            // Retrieve information from WeatherData Class
             // weather
             weather = Program.WeatherData.weather;
             wetId = Program.WeatherData.wetId;
@@ -137,6 +140,7 @@ namespace NicolePhramd.Pages
             wind = Program.WeatherData.wind;
             windSpeed = Program.WeatherData.windSpeed;
             windDir = Program.WeatherData.windDir;
+            windText = Program.WeatherData.windText;
             // length of day
             sunrise = Program.WeatherData.sunrise;
             riseTime = Program.WeatherData.riseTime;
@@ -151,8 +155,7 @@ namespace NicolePhramd.Pages
             // clouds
             clouds = Program.WeatherData.clouds;
             all = Program.WeatherData.all;
-
-
+            
             // weather
             listNinja = new JsonNinja(Program.Fetch.Data);
             weather = listNinja.GetDetails("\"weather\"");
@@ -164,8 +167,7 @@ namespace NicolePhramd.Pages
             icon = dayIcon[0].Replace("\"]", "");
             icon = icon.Replace("\"", "");
             iconShow = "http://openweathermap.org/img/w/" + icon + ".png";
-
-
+            
             // main
             temp = wetMain[1].Replace("\"temp\":", "");
             tempHigh = jNinja.GetInfo("\"temp_max\"");
@@ -185,24 +187,29 @@ namespace NicolePhramd.Pages
             sunset = jNinja.GetInfo("\"sunset\"");
             setTime = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(sunset) * 1000).ToLocalTime().ToLongTimeString();
 
-            // DO NOT COME IN UNLESS IT HAS BEEN RAINING OR SNOWING
+            // DOES NOT COME IN UNLESS IT HAS BEEN RAINING OR SNOWING
+            // Might not need - only tells you how much it has rained/snowed withing the past 3 hours
             // If/Else statement for display
             // rain
-            // rain = listNinja.GetDetails("\"rain\"");
-            // rain3h = rain[0].Replace("\"3h\":", "");
+            /*rain = listNinja.GetDetails("\"rain\"");
+            rain3h = rain[0].Replace("\"3h\":", "");
+            if(rain3h == "null")
+            {
+                rain3h = rain[0].Replace("\"3h\":", "N/A");
+            }
 
             // snow
-            // snow = listNinja.GetDetails("\"snow\"");
-            // snow3h = snow[0].Replace("\"3h\":", "");
+            snow = listNinja.GetDetails("\"snow\"");
+            snow3h = snow[0].Replace("\"3h\":", "");
+            if (snow3h == "null")
+            {
+                snow3h = snow[0].Replace("\"3h\":", "N/A");
+            }*/
 
             // clouds
             clouds = listNinja.GetDetails("\"clouds\"");
             all =clouds[0].Replace("\"all\":" , "");
 
-
-
-            // UNIT IF/ELSE TO SHOW PROPER DATA (Metric/Imperial)
-            // taking out the Kelvin option (breaks down the information the same way Metric does)
             metric = Program.Weather.metric;
             imperial = Program.Weather.imperial;
             kelvin = Program.Weather.kelvin;
@@ -234,64 +241,79 @@ namespace NicolePhramd.Pages
                 windSpeed = windSpeed + " meters/second";
             }
 
-            // testing
-            // Convert to Double then assign a String.
-            double wTemp = Convert.ToDouble(windDir);
-            switch (windDir)
+            // When Imperial is selected the input string is not the correct type & only sometimes ??
+            // Break down into only N/NE/E/SE/S/SW/W/NW ?? 
+            // Take out decimal values?
+            double windTemp = Convert.ToDouble(windDir);
+            switch (windTemp)
             {
-                case "N":
-                    // 348.75 - 11.25
-                    windDir = "N"; 
+                case double windDir when (windDir >= 348.75 && windDir <= 11.25):
+                    // 348.75 - 11.25 = N
+                    windText = windDir + " °N";
                     break;
-                case "NNE":
-                    // 11.26 - 33.75
+                case double windDir when (windDir >=11.26 && windDir <=33.75):
+                    // 11.26 - 33.75 = NNE
+                    windText = windDir + " °NNE";
                     break;
-                case "NE":
-                    // 33.76 - 56.25
+                case double windDir when (windDir >= 33.76 && windDir <= 56.25):
+                    // 33.76 - 56.25 = NE
+                    windText = windDir + " °NE";
                     break;
-                case "ENE":
-                    // 56.26 - 78.75
+                case double windDir when (windDir >= 56.26 && windDir <= 78.75):
+                    // 56.26 - 78.75 = ENE
+                    windText = windDir + " °ENE";
                     break;
-                case "E":
-                    // 78.76 - 101.25
+                case double windDir when (windDir >= 78.76 && windDir <= 101.25):
+                    // 78.76 - 101.25 = E
+                    windText = windDir + " °E";
                     break;
-                case "ESE":
-                    // 101.26 - 123.75
+                case double windDir when (windDir >= 101.26 && windDir <= 123.75):
+                    // 101.26 - 123.75 = ESE
+                    windText = windDir + " °ESE";
                     break;
-                case "SE":
-                    // 123.76 - 146.25
+                case double windDir when (windDir >= 123.76 && windDir <= 146.25):
+                    // 123.76 - 146.25 = SE
+                    windText = windDir + " °SE";
                     break;
-                case "SSE":
-                    // 146.26 - 168.75
+                case double windDir when (windDir >= 146.26 && windDir <= 168.75):
+                    // 146.26 - 168.75 = SSE
+                    windText = windDir + " °SSE";
                     break;
-                case "S":
-                    // 168.76 - 191.25
+                case double windDir when (windDir >= 168.76 && windDir <= 191.25):
+                    // 168.76 - 191.25 = S
+                    windText = windDir + " °S";
                     break;
-                case "SSW":
-                    // 191.26 - 213.75
+                case double windDir when (windDir >= 191.26 && windDir <= 213.75):
+                    // 191.26 - 213.75 = SSW
+                    windText = windDir + " °SSW";
                     break;
-                case "SW":
-                    // 213.76 - 236.25
+                case double windDir when (windDir >= 213.76 && windDir <= 236.25):
+                    // 213.76 - 236.25 = SW
+                    windText = windDir + " °SW";
                     break;
-                case "WSW":
-                    // 236.26 - 258.75
+                case double windDir when (windDir >= 236.26 && windDir <= 258.75):
+                    // 236.26 - 258.75 = WSW
+                    windText = windDir + " °WSW";
                     break;
-                case "W":
-                    // 258.76 - 281.25
+                case double windDir when (windDir >= 258.76 && windDir <= 281.25):
+                    // 258.76 - 281.25 = W
+                    windText = windDir + " °W";
                     break;
-                case "WNW":
-                    // 281.26 - 303.75
+                case double windDir when (windDir >= 281.26 && windDir <= 303.75):
+                    // 281.26 - 303.75 = WNW
+                    windText = windDir + " °WNW";
                     break;
-                case "NW":
-                    // 303.76 - 326.25
+                case double windDir when (windDir >= 303.76 && windDir <= 326.25):
+                    // 303.76 - 326.25 = NW
+                    windText = windDir + " °NW";
                     break;
-                case "NNW":
-                    // 326.26 - 348.75
+                case double windDir when (windDir >= 326.26 && windDir <= 348.74):
+                    // 326.26 - 348.75 = NNW
+                    windText = windDir + " °NNW";
                     break;
                 default:
                     break;
-            }
-
+            } //windTemp() - Wind Direction
 
             // userId is needed for saving changes to that user only (will be needed for all changes)
             int userId = 1; // grab from the page ????
@@ -326,11 +348,34 @@ namespace NicolePhramd.Pages
                 }
             }
             // Refresh the settings page @ weather pos on page
+        } //OnPostWeather()
 
-        }
+        public void GetNews()
+        {
+            display = "grid";
+
+            headline = Program.News.headline;
+            channel = Program.News.channel;
+            credit = Program.News.credit;
+            published = Program.News.published;
+            day = Program.News.day;
+
+            jNinja = new JsonNinja(Program.Fetch.Data);
+            List<string> newsNames = jNinja.GetNames();
+            List<string> newsVals = jNinja.GetVals();
+
+            day = new DateTime(1970, 1, 1);
+
+            headline = jNinja.GetInfo("\title\"");
+            channel = jNinja.GetInfo("\"name\"");
+            credit = jNinja.GetInfo("\"author\"");
+            published = jNinja.GetInfo("\"publishedAt\"");
+        } //OnPostNews()
 
         public void OnGet()
-        { }
+        {
+            //GrabNews();
+        }
 
     }
 }
