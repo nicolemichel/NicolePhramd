@@ -7,10 +7,7 @@ namespace NicolePhramd.Utility
 {
     public class News
     {
-        public string headline { get; set; }
-        public string channel { get; set; }
-        public string credit { get; set; }
-        public string published { get; set; }
-        public DateTime day { get; set; }
+        public string selCoun { get; set; }
+        public string numOfArticles { get; set; }
     }
 }

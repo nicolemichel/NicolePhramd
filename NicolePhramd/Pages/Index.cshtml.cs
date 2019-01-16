@@ -54,12 +54,6 @@ namespace NicolePhramd.Pages
         public string riseTime;
         public string sunset;
         public string setTime;
-        // rain
-        public List<string> rain = new List<string>(); // "list"
-        public string rain3h; // volume last 3 hours
-        // snow
-        public List<string> snow = new List<string>(); // "list"
-        public string snow3h;
         // clouds
         public List<string> clouds = new List<string>(); // cloudiness
         public string all;
@@ -72,10 +66,11 @@ namespace NicolePhramd.Pages
         //people/colours
 
         // NEWS
-        public string headline;
-        public string channel;
-        public string credit;
-        public string published;
+        public string selCoun;
+        public string numOfArticles;
+        public List<string> headline;
+        public List<string> channel;
+        public List<string> published;
         public DateTime day;
         // thumbnail ??
         //headlines (timer?)
@@ -95,7 +90,8 @@ namespace NicolePhramd.Pages
         {
             display = "grid";
             // HAVE TO MAKE A DEFAULT - London, ON & Metric.
-                                   
+                              
+            // SETTINGS
             Program.Weather.selCity = City;
             Program.Weather.selCountry = Country;
             Program.Weather.selUnit = Unit;
@@ -146,12 +142,6 @@ namespace NicolePhramd.Pages
             riseTime = Program.WeatherData.riseTime;
             sunset = Program.WeatherData.sunset;
             setTime = Program.WeatherData.setTime;
-            // rain
-            rain = Program.WeatherData.rain;
-            rain3h = Program.WeatherData.rain3h;
-            // snow
-            snow = Program.WeatherData.snow;
-            snow3h = Program.WeatherData.snow3h;
             // clouds
             clouds = Program.WeatherData.clouds;
             all = Program.WeatherData.all;
@@ -186,25 +176,6 @@ namespace NicolePhramd.Pages
             riseTime = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(sunrise) * 1000).ToLocalTime().ToLongTimeString();
             sunset = jNinja.GetInfo("\"sunset\"");
             setTime = (new DateTime(1970, 1, 1)).AddMilliseconds(double.Parse(sunset) * 1000).ToLocalTime().ToLongTimeString();
-
-            // DOES NOT COME IN UNLESS IT HAS BEEN RAINING OR SNOWING
-            // Might not need - only tells you how much it has rained/snowed withing the past 3 hours
-            // If/Else statement for display
-            // rain
-            /*rain = listNinja.GetDetails("\"rain\"");
-            rain3h = rain[0].Replace("\"3h\":", "");
-            if(rain3h == "null")
-            {
-                rain3h = rain[0].Replace("\"3h\":", "N/A");
-            }
-
-            // snow
-            snow = listNinja.GetDetails("\"snow\"");
-            snow3h = snow[0].Replace("\"3h\":", "");
-            if (snow3h == "null")
-            {
-                snow3h = snow[0].Replace("\"3h\":", "N/A");
-            }*/
 
             // clouds
             clouds = listNinja.GetDetails("\"clouds\"");
@@ -350,32 +321,44 @@ namespace NicolePhramd.Pages
             // Refresh the settings page @ weather pos on page
         } //OnPostWeather()
 
-        public void GetNews()
+        public async Task OnPostNews(string Coun, string Articles)
         {
             display = "grid";
 
-            headline = Program.News.headline;
-            channel = Program.News.channel;
-            credit = Program.News.credit;
-            published = Program.News.published;
-            day = Program.News.day;
+            // SETTINGS
+            // country
+            // pageSize - #of articles to cycle through (100 max, 20 default)
+            Program.News.selCoun = Coun;
+            Program.News.numOfArticles = Articles;
+
+            // Pulling in information from the API
+            await Program.Fetch.GrabNews(Coun, Articles);
+
+            jNinja = new JsonNinja(Program.Fetch.Data);
+            List<string> names = jNinja.GetNames();
+            List<string> vals = jNinja.GetVals();
+
+            //Program.News.selCoun = ; - Grab from drop down
+            //Program.News.numOfArticles = ;  - Grab from drop down
+
+            headline = Program.NewsData.headline;
+            channel = Program.NewsData.channel;
+            published = Program.NewsData.published;
+            day = Program.NewsData.day;
 
             jNinja = new JsonNinja(Program.Fetch.Data);
             List<string> newsNames = jNinja.GetNames();
             List<string> newsVals = jNinja.GetVals();
 
             day = new DateTime(1970, 1, 1);
-
-            headline = jNinja.GetInfo("\title\"");
-            channel = jNinja.GetInfo("\"name\"");
-            credit = jNinja.GetInfo("\"author\"");
-            published = jNinja.GetInfo("\"publishedAt\"");
+            
+            headline = jNinja.GetDetails("\"title\"");
+            channel = jNinja.GetDetails("\"name\"");
+            published = jNinja.GetDetails("\"publishedAt\"");
         } //OnPostNews()
 
         public void OnGet()
-        {
-            //GrabNews();
-        }
+        { }
 
     }
 }

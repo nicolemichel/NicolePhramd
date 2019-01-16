@@ -58,20 +58,39 @@
             <p id="wnd">Wind:</p>
             <p id="spd">Speed: @Model.windSpeed</p>
             <p id="dir">Direction: @Model.windText</p>
-            <!--<p id="prc">Precipitation</p>
-            <p id="ran">Rain: @Model.rain3h mm</p>
-            <p id="snw">Snow: @Model.snow3h mm</p>-->
         </div>
     </div>
     <div id="calendar">
         Calendar
     </div>
     <div id="news">
-        <div id="newsGrid">
-            News
+        <form method="post" asp-page-handler="News">
+            <select required class="drop" name="selCoun" @Model.selCoun>
+                <option value="">Select A Country</option>
+                <option value="ca">Canada</option>
+                <option value="us">United States</option>
+            </select>
+
+            <select required class="drop" name="numOfArticles" @Model.numOfArticles>
+                <option value="">Select The Amount of Articles You Want To See</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+                <option value="15">15</option>
+                <option value="20">20</option>
+                <option value="25">25</option>
+                <option value="30">30</option>
+                <option value="35">35</option>
+                <option value="40">40</option>
+                <option value="45">45</option>
+                <option value="50">50</option>
+            </select>
+
+            <input type="submit" value="Get the News" />
+        </form>
+        <div id="newsGrid" style="display: @Model.display">
+            <p id="new">News</p>
             <p id="headline">@Model.headline</p>
             <p id="channel">@Model.channel</p>
-            <p id="credit">@Model.credit</p>
             <p id="published">@Model.published</p>
         </div>
     </div>

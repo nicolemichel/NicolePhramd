@@ -60,11 +60,6 @@ header {
         grid-template-columns: repeat(4, 1fr);
         grid-auto-rows: minmax(100px, auto);
         grid-template-areas: 
-            /* "img  .  des cld" 
-            "loc day ris set" 
-            "tmp hmd wnd prc" 
-            "hot prs spd ran" 
-            "low vis dir snw"; */
             "img loc des cld" 
             "day ris set  . " 
             "tmp hot low  . " 
@@ -183,28 +178,6 @@ header {
             width: auto;
             background: #fff;
         }
-        /*#prc {
-            display: grid;
-            grid-area: prc;
-            height: auto;
-            width: auto;
-            text-align: center;
-            background: #fff;
-        }
-        #ran {
-            display: grid;
-            grid-area: ran;
-            height: auto;
-            width: auto;
-            background: #fff;
-        }
-        #snw {
-            display: grid;
-            grid-area: snw;
-            height: auto;
-            width: auto;
-            background: #fff;
-        }*/
     
 #calendar {
     display: grid;
@@ -224,10 +197,18 @@ header {
         grid-template-columns: repeat(2, 1fr);
         grid-auto-rows: minmax(100px, auto);
         grid-template-areas:
+            "new new"
             "hdl hdl"
             "chl chl"
-            "crd pbl";
+            "pbl pbl";
     }
+        #new {
+            display: grid;
+            grid-area: new;
+            background: #fff;
+            height: auto;
+            width: auto;
+        }
         #headline {
             display: grid;
             grid-area: hdl;
@@ -238,13 +219,6 @@ header {
         #channel {
             display: grid;
             grid-area: chl;
-            background: #fff;
-            height: auto;
-            width: auto;
-        }
-        #credit {
-            display: grid;
-            grid-area: crd;
             background: #fff;
             height: auto;
             width: auto;

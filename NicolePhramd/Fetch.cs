@@ -37,13 +37,13 @@ namespace NicolePhramd
         }
         public async Task GrabCal()
         { }
-        public async Task GrabNews()
+        public async Task GrabNews(string selCoun, string numOfArticles)
         {
             client.DefaultRequestHeaders.Accept.Clear();
             client.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("applicationException/json"));
 
             string news_api = "64fe9e45b01d46ddb46fb999986ff796";
-            HttpResponseMessage news = await client.GetAsync("https://newsapi.org/v2/top-headlines?" + "country=ca&" + "apiKey=" + news_api);
+            HttpResponseMessage news = await client.GetAsync("https://newsapi.org/v2/top-headlines?" + "country=" + selCoun + "&pageSize=" + numOfArticles + "&sortBy=popularity&apiKey=" + news_api);
 
             if (news.IsSuccessStatusCode)
             {

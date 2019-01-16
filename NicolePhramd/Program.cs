@@ -19,6 +19,7 @@ namespace NicolePhramd
         public static Weather Weather = new Weather();
         public static WeatherData WeatherData = new WeatherData();
         public static News News = new News();
+        public static NewsData NewsData= new NewsData();
 
         public static void Main(string[] args)
         {

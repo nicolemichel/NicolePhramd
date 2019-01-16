@@ -31,13 +31,7 @@ namespace NicolePhramd.Utility
         public string riseTime { get; set; }
         public string sunset { get; set; }
         public string setTime { get; set; }
-        // RAIN
-        public List<string> rain = new List<string>(); // "list"
-        public string rain3h { get; set; } // volume last 3 hours
-        // SNOW
-        public List<string> snow = new List<string>(); // "list"
-        public string snow3h { get; set; }
-        // clouds
+        // CLOUDS
         public List<string> clouds = new List<string>(); // cloudiness
         public string all { get; set; }
 
