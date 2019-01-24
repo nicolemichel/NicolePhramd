@@ -3,6 +3,8 @@ using System.Data.SqlClient;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System;
+using System.Timers;
+using System.Globalization;
 
 namespace NicolePhramd.Pages
 {
@@ -68,17 +70,100 @@ namespace NicolePhramd.Pages
         // NEWS
         public string selCoun;
         public string numOfArticles;
-        public List<string> headline;
-        public List<string> channel;
-        public List<string> published;
-        public DateTime day;
-        // thumbnail ??
-        //headlines (timer?)
+        public string headline;
+        public List<string> headlineList;
+        public string channel;
+        public List<string> channelList;
+        public string published;
+        public List<string> publishedList;
+        public DateTime publishedDate;
+        // stop from skipping over
+        public List<string> headlines = new List<string>();
+        public string headlineOne;
+        public string headlineTwo;
+        public string headlineThree;
+        public string headlineFour;
+        public string headlineFive;
+        public List<string> channels = new List<string>();
+        public string channelOne;
+        public string channelTwo;
+        public string channelThree;
+        public string channelFour;
+        public string channelFive;
+        public List<string> publishDates = new List<string>();
+        public string publishedOne;
+        public string publishedTwo;
+        public string publishedThree;
+        public string publishedFour;
+        public string publishedFive;
+        // headlines (timer?)
+        public void Timer(int Time)
+        {
+            Timer tick = new Timer();
+            tick.Elapsed += new ElapsedEventHandler(articleSwitch); // switches article
+            tick.Interval = Time; // time interval for article switch
+            // defualt 15s - set up if for 10 and 20 seconds (dropdown list)
+            tick.Enabled = true; // timer is on
+            tick.AutoReset = true;
+        }
+        private void articleSwitch(object sender, ElapsedEventArgs e)
+        {
+            int articleCount = Convert.ToInt32(numOfArticles);
+            if (articleCount <= 5) // 5 articles
+            {
+                /* example
+                   show article 1 00-10
+                   show article 2 10-20
+                   show article 3 20-30
+                   show article 4 30-40
+                   show article 5 50-60
+                */
+
+                for (int i = 0; i < articleCount; i++)
+                {
+                    headline = headlines[i];
+                    channel = channels[i];
+                    published = publishDates[i];
+                }
+            }
+            else if (articleCount <= 10) // 10 articles
+            {
+                /* example
+                   show article 6 60-70
+                   show article 7 70-80
+                   show article 8 80-90
+                   show article 9 90-100
+                   show article 10 100-110
+                */
+
+                for (int i = 0; i < articleCount; i++)
+                {
+                    headline = headlineList[i];
+                    channel = channelList[i];
+                    published = publishedList[i];
+                }
+            }
+            else // 15 articles
+            {
+                /* example
+                  show article 11 110-120
+                  show article 12 120-130
+                  show article 13 130-140
+                  show article 14 140-150
+                  show article 15 150-160
+               */
+                for (int i = 0; i < articleCount; i++)
+                {
+                    headline = headlineList[i];
+                    channel = channelList[i];
+                    published = publishedList[i];
+                }
+            }
+
+        } // article switch
 
         //todo list
-
-        //date&time
-        //timers/countdowns ???
+        
 
         public void OnPostLogin(string email, string password)
         {
@@ -159,7 +244,7 @@ namespace NicolePhramd.Pages
             iconShow = "http://openweathermap.org/img/w/" + icon + ".png";
             
             // main
-            temp = wetMain[1].Replace("\"temp\":", "");
+            temp = wetMain[1].Replace("\"temp\":", ""); // fix! if rain and mist etc temp doesn't show properly
             tempHigh = jNinja.GetInfo("\"temp_max\"");
             tempLow = jNinja.GetInfo("\"temp_min\"");
             humidity = jNinja.GetInfo("\"humidity\"");
@@ -305,6 +390,7 @@ namespace NicolePhramd.Pages
                     myConn.Open();
                     
                     // Put in same order as the SP & Table (maybe change userId to last - since it's a FK ??)
+                    // INSERT DEFAULT VALUES OF LONDON, CANADA AND METRIC
                     getWeather.Parameters.AddWithValue("@userId", userId);
                     getWeather.Parameters.AddWithValue("@country", selCountry);
                     getWeather.Parameters.AddWithValue("@city", selCity);
@@ -321,13 +407,11 @@ namespace NicolePhramd.Pages
             // Refresh the settings page @ weather pos on page
         } //OnPostWeather()
 
-        public async Task OnPostNews(string Coun, string Articles)
+        public async Task OnPostNews(string Coun, string Articles, int Time)
         {
             display = "grid";
 
             // SETTINGS
-            // country
-            // pageSize - #of articles to cycle through (100 max, 20 default)
             Program.News.selCoun = Coun;
             Program.News.numOfArticles = Articles;
 
@@ -335,30 +419,137 @@ namespace NicolePhramd.Pages
             await Program.Fetch.GrabNews(Coun, Articles);
 
             jNinja = new JsonNinja(Program.Fetch.Data);
-            List<string> names = jNinja.GetNames();
-            List<string> vals = jNinja.GetVals();
-
-            //Program.News.selCoun = ; - Grab from drop down
-            //Program.News.numOfArticles = ;  - Grab from drop down
-
-            headline = Program.NewsData.headline;
-            channel = Program.NewsData.channel;
-            published = Program.NewsData.published;
-            day = Program.NewsData.day;
-
-            jNinja = new JsonNinja(Program.Fetch.Data);
             List<string> newsNames = jNinja.GetNames();
             List<string> newsVals = jNinja.GetVals();
 
-            day = new DateTime(1970, 1, 1);
-            
-            headline = jNinja.GetDetails("\"title\"");
-            channel = jNinja.GetDetails("\"name\"");
-            published = jNinja.GetDetails("\"publishedAt\"");
-        } //OnPostNews()
+            // Retrieve information from News Class
+            selCoun = Program.News.selCoun;
+            numOfArticles = Program.News.numOfArticles;
 
+            // Grab information from NewsDataClass
+            headline = Program.NewsData.headline;
+            headlineList = Program.NewsData.headlineList;
+            channel = Program.NewsData.channel;
+            channelList = Program.NewsData.channelList;
+            published = Program.NewsData.published;
+            publishedList = Program.NewsData.publishedList;
+            publishedDate = Program.NewsData.publishedDate;
+            
+
+            headlineList = jNinja.GetDetails("\"title\"");
+            headlineOne = headlineList[0];
+            headlineOne = headlineOne.Replace("\"", "");
+            channelList = jNinja.GetDetails("\"name\"");
+            channelOne = channelList[0];
+            channelOne = channelOne.Replace("\"", "");
+            publishedList = jNinja.GetDetails("\"publishedAt\"");
+            publishedOne = publishedList[0];
+            publishedOne = publishedOne.Replace("\"", "");
+            publishedOne = publishedOne.Replace("T", " ");
+            publishedOne = publishedOne.Replace("Z", "");
+            publishedDate = DateTime.ParseExact(publishedOne, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); // stops the next line from taking the default time value
+            // ^ date format has to be in the exact format as how it is taken in - then you can change it after the fact
+            publishedOne = publishedDate.ToString("dddd, MMMM dd yyyy HH:mm tt");
+            headlines.Add(headlineOne);
+            channels.Add(channelOne);
+            publishDates.Add(publishedOne);
+
+            headlineList = jNinja.GetDetails("\"title\"");
+            headlineTwo = headlineList[1];
+            headlineTwo = headlineTwo.Replace("\"", "");
+            channelList = jNinja.GetDetails("\"name\"");
+            channelTwo = channelList[1];
+            channelTwo = channelTwo.Replace("\"", "");
+            publishedList = jNinja.GetDetails("\"publishedAt\"");
+            publishedTwo = publishedList[1];
+            publishedTwo = publishedTwo.Replace("\"", "");
+            publishedTwo = publishedTwo.Replace("T", " ");
+            publishedTwo = publishedTwo.Replace("Z", "");
+            publishedDate = DateTime.ParseExact(publishedTwo, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); // stops the next line from taking the default time value
+            // ^ date format has to be in the exact format as how it is taken in - then you can change it after the fact
+            publishedTwo = publishedDate.ToString("dddd, MMMM dd yyyy HH:mm tt");
+            headlines.Add(headlineTwo);
+            channels.Add(channelTwo);
+            publishDates.Add(publishedTwo);
+
+            headlineList = jNinja.GetDetails("\"title\"");
+            headlineThree = headlineList[2];
+            headlineThree = headlineThree.Replace("\"", "");
+            channelList = jNinja.GetDetails("\"name\"");
+            channelThree = channelList[2];
+            channelThree = channelThree.Replace("\"", "");
+            publishedList = jNinja.GetDetails("\"publishedAt\"");
+            publishedThree = publishedList[2];
+            publishedThree = publishedThree.Replace("\"", "");
+            publishedThree = publishedThree.Replace("T", " ");
+            publishedThree = publishedThree.Replace("Z", "");
+            publishedDate = DateTime.ParseExact(publishedThree, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); // stops the next line from taking the default time value
+            // ^ date format has to be in the exact format as how it is taken in - then you can change it after the fact
+            publishedThree = publishedDate.ToString("dddd, MMMM dd yyyy HH:mm tt");
+            headlines.Add(headlineThree);
+            channels.Add(channelThree);
+            publishDates.Add(publishedThree);
+
+            headlineList = jNinja.GetDetails("\"title\"");
+            headlineFour = headlineList[3];
+            headlineFour = headlineFour.Replace("\"", "");
+            channelList = jNinja.GetDetails("\"name\"");
+            channelFour = channelList[3];
+            channelFour = channelFour.Replace("\"", "");
+            publishedList = jNinja.GetDetails("\"publishedAt\"");
+            publishedFour = publishedList[3];
+            publishedFour = publishedFour.Replace("\"", "");
+            publishedFour = publishedFour.Replace("T", " ");
+            publishedFour = publishedFour.Replace("Z", "");
+            publishedDate = DateTime.ParseExact(publishedFour, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); // stops the next line from taking the default time value
+            // ^ date format has to be in the exact format as how it is taken in - then you can change it after the fact
+            publishedFour = publishedDate.ToString("dddd, MMMM dd yyyy HH:mm tt");
+            headlines.Add(headlineFour);
+            channels.Add(channelFour);
+            publishDates.Add(publishedFour);
+
+            headlineList = jNinja.GetDetails("\"title\"");
+            headlineFive = headlineList[4];
+            headlineFive = headlineFive.Replace("\"", "");
+            channelList = jNinja.GetDetails("\"name\"");
+            channelFive = channelList[4];
+            channelFive = channelFive.Replace("\"", "");
+            publishedList = jNinja.GetDetails("\"publishedAt\"");
+            publishedFive = publishedList[4];
+            publishedFive = publishedFive.Replace("\"", "");
+            publishedFive = publishedFive.Replace("T", " ");
+            publishedFive = publishedFive.Replace("Z", "");
+            publishedDate = DateTime.ParseExact(publishedFive, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); // stops the next line from taking the default time value
+            // ^ date format has to be in the exact format as how it is taken in - then you can change it after the fact
+            publishedFive = publishedDate.ToString("dddd, MMMM dd yyyy HH:mm tt");
+            headlines.Add(headlineFive);
+            channels.Add(channelFive);
+            publishDates.Add(publishedFive);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            Timer(Time);
+
+            // CREATE THE DATABASE FOR THE NEWS SETTINGS
+            // country
+            // number of articles to swap through (timer based)
+            // INSERT DEFAULT OF CANADA AND 20
+        } //OnPostNews()
+        
         public void OnGet()
         { }
 
-    }
-}
+    } // class
+} // namespace

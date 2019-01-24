@@ -3,6 +3,12 @@
 @{
     ViewData["Title"] = "Home page";
 }
+<!--IF THE SCREEN SIZE ON THE COMPUTER 
+    IS DIFFERENT FROM THE SIZE OF THE DISPLAY 
+    HOW WILL WE MAKE SURE IT GOES PROPERLY
+    CAN'T AUTO-->
+<!--SETTING TO CHOOSE YOUR SCREEN SIZE AND 
+    OPTION OF HORIZONTAL/VERTICLE????-->
 
 <div id="grid">
     <header></header>
@@ -65,24 +71,24 @@
     </div>
     <div id="news">
         <form method="post" asp-page-handler="News">
-            <select required class="drop" name="selCoun" @Model.selCoun>
+            <select required class="drop" name="Coun" @Model.selCoun>
                 <option value="">Select A Country</option>
                 <option value="ca">Canada</option>
                 <option value="us">United States</option>
             </select>
 
-            <select required class="drop" name="numOfArticles" @Model.numOfArticles>
-                <option value="">Select The Amount of Articles You Want To See</option>
+            <select required class="drop" name="Articles" @Model.numOfArticles>
+                <option value="">Amount of Articles Wanted</option>
                 <option value="5">5</option>
                 <option value="10">10</option>
-                <option value="15">15</option>
                 <option value="20">20</option>
-                <option value="25">25</option>
-                <option value="30">30</option>
-                <option value="35">35</option>
-                <option value="40">40</option>
-                <option value="45">45</option>
-                <option value="50">50</option>
+            </select>
+
+            <select required class="drop" name="Time">
+                <option value="">Time To Read Headlines</option>
+                <option value="10000">10 seconds</option>
+                <option value="15000">15 seconds</option>
+                <option value="20000">20 seconds</option>
             </select>
 
             <input type="submit" value="Get the News" />

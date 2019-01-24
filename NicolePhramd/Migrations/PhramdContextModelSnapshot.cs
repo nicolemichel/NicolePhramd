@@ -19,6 +19,33 @@ namespace NicolePhramd.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("NicolePhramd.Models.NewsDB", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("articles")
+                        .IsRequired();
+
+                    b.Property<string>("country")
+                        .IsRequired();
+
+                    b.Property<string>("status")
+                        .IsRequired();
+
+                    b.Property<string>("time")
+                        .IsRequired();
+
+                    b.Property<int>("userId");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("News");
+                });
+
             modelBuilder.Entity("NicolePhramd.Models.User", b =>
                 {
                     b.Property<int>("id")
@@ -73,6 +100,14 @@ namespace NicolePhramd.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("Weather");
+                });
+
+            modelBuilder.Entity("NicolePhramd.Models.NewsDB", b =>
+                {
+                    b.HasOne("NicolePhramd.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("NicolePhramd.Models.WeatherDB", b =>

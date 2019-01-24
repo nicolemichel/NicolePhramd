@@ -13,9 +13,11 @@ namespace NicolePhramd.Models
 
         public DbSet<User> User { get; set; }
         public DbSet<WeatherDB> Weather { get; set; }
+        public DbSet<NewsDB> News { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<NewsDB>().ToTable("News");
             modelBuilder.Entity<WeatherDB>().ToTable("Weather");
             modelBuilder.Entity<User>().ToTable("User");
         }

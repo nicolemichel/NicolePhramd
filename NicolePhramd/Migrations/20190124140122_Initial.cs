@@ -26,6 +26,29 @@ namespace NicolePhramd.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "News",
+                columns: table => new
+                {
+                    id = table.Column<int>(nullable: false)
+                        .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
+                    country = table.Column<string>(nullable: false, defaultValue: "ca"),
+                    articles = table.Column<string>(nullable: false, defaultValue: "10"),
+                    time = table.Column<string>(nullable: false, defaultValue: "15000"),
+                    status = table.Column<string>(nullable: false, defaultValue: "A"),
+                    userId = table.Column<int>(nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_News", x => x.id);
+                    table.ForeignKey(
+                        name: "FK_News_User_userId",
+                        column: x => x.userId,
+                        principalTable: "User",
+                        principalColumn: "id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Weather",
                 columns: table => new
                 {
@@ -49,6 +72,11 @@ namespace NicolePhramd.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_News_userId",
+                table: "News",
+                column: "userId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Weather_userId",
                 table: "Weather",
                 column: "userId");
@@ -56,6 +84,9 @@ namespace NicolePhramd.Migrations
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "News");
+
             migrationBuilder.DropTable(
                 name: "Weather");
 

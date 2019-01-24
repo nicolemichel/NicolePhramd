@@ -10,7 +10,7 @@ using NicolePhramd.Models;
 namespace NicolePhramd.Migrations
 {
     [DbContext(typeof(PhramdContext))]
-    [Migration("20181218153625_Initial")]
+    [Migration("20190124140122_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -20,6 +20,33 @@ namespace NicolePhramd.Migrations
                 .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+            modelBuilder.Entity("NicolePhramd.Models.NewsDB", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("articles")
+                        .IsRequired();
+
+                    b.Property<string>("country")
+                        .IsRequired();
+
+                    b.Property<string>("status")
+                        .IsRequired();
+
+                    b.Property<string>("time")
+                        .IsRequired();
+
+                    b.Property<int>("userId");
+
+                    b.HasKey("id");
+
+                    b.HasIndex("userId");
+
+                    b.ToTable("News");
+                });
 
             modelBuilder.Entity("NicolePhramd.Models.User", b =>
                 {
@@ -75,6 +102,14 @@ namespace NicolePhramd.Migrations
                     b.HasIndex("userId");
 
                     b.ToTable("Weather");
+                });
+
+            modelBuilder.Entity("NicolePhramd.Models.NewsDB", b =>
+                {
+                    b.HasOne("NicolePhramd.Models.User", "user")
+                        .WithMany()
+                        .HasForeignKey("userId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("NicolePhramd.Models.WeatherDB", b =>
