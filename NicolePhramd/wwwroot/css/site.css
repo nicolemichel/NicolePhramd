@@ -199,7 +199,6 @@ header {
         grid-template-areas:
             "new new"
             "hdl hdl"
-            "chl chl"
             "pbl pbl";
     }
         #new {

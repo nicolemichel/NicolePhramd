@@ -77,7 +77,26 @@ namespace NicolePhramd.Pages
         public string published;
         public List<string> publishedList;
         public DateTime publishedDate;
-      
+        // stop from skipping over
+        public List<string> headlines = new List<string>();
+        public string headlineOne;
+        public string headlineTwo;
+        public string headlineThree;
+        public string headlineFour;
+        public string headlineFive;
+        public List<string> channels = new List<string>();
+        public string channelOne;
+        public string channelTwo;
+        public string channelThree;
+        public string channelFour;
+        public string channelFive;
+        public List<string> publishDates = new List<string>();
+        public string publishedOne;
+        public string publishedTwo;
+        public string publishedThree;
+        public string publishedFour;
+        public string publishedFive;
+
         // headlines (timer?)
         public void Timer(int Time)
         {
@@ -90,62 +109,11 @@ namespace NicolePhramd.Pages
         }
         private void articleSwitch(object sender, ElapsedEventArgs e)
         {
-            int articleCount = Convert.ToInt32(numOfArticles);
-            if (articleCount <= 5) // 5 articles
-            {
-                /* example
-                   show article 1 00-10
-                   show article 2 10-20
-                   show article 3 20-30
-                   show article 4 30-40
-                   show article 5 50-60
-                */
-
-                for (int i = 0; i < articleCount; i++)
-                {
-                    headline = headlineList[i];
-                    channel = channelList[i];
-                    published = publishedList[i];
-                }
-            }
-            else if (articleCount <= 10) // 10 articles
-            {
-                /* example
-                   show article 6 60-70
-                   show article 7 70-80
-                   show article 8 80-90
-                   show article 9 90-100
-                   show article 10 100-110
-                */
-
-                for (int i = 0; i <= articleCount; i++)
-                {
-                    headline = headlineList[i];
-                    channel = channelList[i];
-                    published = publishedList[i];
-                }
-            }
-            else // 15 articles
-            {
-                /* example
-                  show article 11 110-120
-                  show article 12 120-130
-                  show article 13 130-140
-                  show article 14 140-150
-                  show article 15 150-160
-               */
-                for (int i = 0; i <= articleCount; i++)
-                {
-                    headline = headlineList[i];
-                    channel = channelList[i];
-                    published = publishedList[i];
-                }
-            }
-
+            headline = Program.NewsData.GetHeadline();
+            published = Program.NewsData.GetPublished();
         } // article switch
 
-        //todo list
-        
+        //todo list????
 
         public void OnPostLogin(string email, string password)
         {
@@ -411,39 +379,69 @@ namespace NicolePhramd.Pages
             // Grab information from NewsDataClass
             headline = Program.NewsData.headline;
             headlineList = Program.NewsData.headlineList;
-            channel = Program.NewsData.channel;
-            channelList = Program.NewsData.channelList;
             published = Program.NewsData.published;
             publishedList = Program.NewsData.publishedList;
             publishedDate = Program.NewsData.publishedDate;
+            headlines = Program.NewsData.headlines;
+            publishDates = Program.NewsData.publishDates;
 
             int countArticle = Convert.ToInt32(Articles);
-            for(int i = 0; i < countArticle; i++)
+            for (int i = 0; i < countArticle; i++)
             {
                 headlineList = jNinja.GetDetails("\"title\"");
-                headline = headlineList[0];
+                headline = headlineList[i];
                 headline = headline.Replace("\"", "");
-                channelList = jNinja.GetDetails("\"name\"");
-                channel = channelList[0];
-                channel = channel.Replace("\"", "");
+                Program.NewsData.AddHeadline(headline);
                 publishedList = jNinja.GetDetails("\"publishedAt\"");
                 published = publishedList[0];
                 published = published.Replace("\"", "");
                 published = published.Replace("T", " ");
                 published = published.Replace("Z", "");
                 publishedDate = DateTime.ParseExact(published, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture); // stops the next line from taking the default time value
-                                                                                                                     // ^ date format has to be in the exact format as how it is taken in - then you can change it after the fact
+                // ^ date format has to be in the exact format as how it is taken in - then you can change it after the fact
                 published = publishedDate.ToString("dddd, MMMM dd yyyy HH:mm tt");
+                Program.NewsData.AddPublished(published);
             }
-
+            headline = Program.NewsData.GetHeadline();
+            published = Program.NewsData.GetPublished();
             Timer(Time);
 
-            // CREATE THE DATABASE FOR THE NEWS SETTINGS
-            // country
-            // number of articles to swap through (timer based)
-            // INSERT DEFAULT OF CANADA AND 20
+
+            int userId = 1; // grab from the page ????
+
+            if (userId == 0) // not logged in
+            {
+                // only display the home page - no settings AKA no settings page to see these options.
+            }
+
+            else
+            {
+                using (SqlConnection myConn = new SqlConnection(Program.Fetch.cs))
+                {
+                    SqlCommand getNews = new SqlCommand
+                    {
+                        Connection = myConn
+                    };
+                    myConn.Open();
+
+                    // Put in same order as the SP & Table (maybe change userId to last - since it's a FK ??)
+                    // INSERT DEFAULT VALUES OF LONDON, CANADA AND METRIC
+                    getNews.Parameters.AddWithValue("@userId", userId);
+                    getNews.Parameters.AddWithValue("@country", selCoun);
+                    getNews.Parameters.AddWithValue("@articles", numOfArticles);
+                    getNews.Parameters.AddWithValue("@time", Time);
+
+                    getNews.CommandText = ("[spNewsSettings]");
+                    getNews.CommandType = System.Data.CommandType.StoredProcedure;
+
+                    getNews.ExecuteNonQuery();
+
+                    myConn.Close();
+                }
+            }
+            // Refresh the settings page @ weather pos on page
         } //OnPostNews()
-        
+
         public void OnGet()
         { }
 
